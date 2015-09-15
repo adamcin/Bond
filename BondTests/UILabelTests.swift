@@ -34,9 +34,9 @@ class UILabelTests: XCTestCase {
     XCTAssert(label.text == "a", "Initial value")
     
     dynamicDriver ->> label.dynAttributedText
-    XCTAssert(label.attributedText.string == "b", "Value after binding")
+    XCTAssert(label.attributedText!.string == "b", "Value after binding")
     
     dynamicDriver.value = NSAttributedString(string: "c")
-    XCTAssert(label.attributedText.string == "c", "Value after dynamic change")
+    XCTAssert(label.attributedText!.string == "c", "Value after dynamic change")
   }
 }

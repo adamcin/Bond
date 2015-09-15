@@ -27,7 +27,7 @@
 
 import UIKit
 
-@objc class TextFieldDynamicHelper
+class TextFieldDynamicHelper
 {
   weak var control: UITextField?
   var listener: (String -> Void)?
@@ -77,7 +77,7 @@ extension UITextField /*: Dynamical, Bondable */ {
       }
       d.bindTo(bond, fire: false, strongly: false)
       d.retain(bond)
-      objc_setAssociatedObject(self, &textDynamicHandleUITextField, d, objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+      objc_setAssociatedObject(self, &textDynamicHandleUITextField, d, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
       return d
     }
   }
