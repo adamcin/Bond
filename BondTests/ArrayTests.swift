@@ -287,7 +287,7 @@ class ArrayTests: XCTestCase {
     var callCount: Int = 0
     let array = DynamicArray<Int>([])
     let mapped = array.map { e, i -> Test in
-      callCount++
+      callCount += 1
       return Test(e)
     }
     
@@ -430,11 +430,11 @@ class ArrayTests: XCTestCase {
     let bond = ArrayBond<Int>()
     var testCount = 0
     bond.willResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedBefore, "before arrays don't match (\(array) vs \(expectedBefore))")
     }
     bond.didResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedAfter, "after arrays don't match (\(array) vs \(expectedAfter))")
     }
     array ->> bond
@@ -452,11 +452,11 @@ class ArrayTests: XCTestCase {
     let bond = ArrayBond<Int>()
     var testCount = 0
     bond.willResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedBefore, "before arrays don't match (\(array) vs \(expectedBefore))")
     }
     bond.didResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedAfter, "after arrays don't match (\(array) vs \(expectedAfter))")
     }
     array ->> bond
@@ -474,11 +474,11 @@ class ArrayTests: XCTestCase {
     let bond = ArrayBond<Int>()
     var testCount = 0
     bond.willResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedBefore, "before arrays don't match (\(array) vs \(expectedBefore))")
     }
     bond.didResetListener = { array in
-      testCount++
+      testCount += 1
       XCTAssert(array == expectedAfter, "after arrays don't match (\(array) vs \(expectedAfter))")
     }
     array ->> bond

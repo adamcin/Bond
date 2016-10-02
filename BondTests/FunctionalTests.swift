@@ -163,7 +163,7 @@ class ReduceTests: XCTestCase {
     let f = d1.filter { $0 > 5 }
     
     let m = f.map { (v: Int) -> String in
-      callCount++
+      callCount += 1
       return "\(v)"
     }
     

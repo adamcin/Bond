@@ -30,19 +30,19 @@ import UIKit
 class TextFieldDynamicHelper
 {
   weak var control: UITextField?
-  var listener: (String -> Void)?
+  var listener: ((String) -> Void)?
   
   init(control: UITextField) {
     self.control = control
-    control.addTarget(self, action: Selector("editingChanged:"), forControlEvents: .EditingChanged)
+    control.addTarget(self, action: Selector("editingChanged:"), for: .editingChanged)
   }
   
-  func editingChanged(control: UITextField) {
+  func editingChanged(_ control: UITextField) {
     self.listener?(control.text ?? "")
   }
   
   deinit {
-    control?.removeTarget(self, action: nil, forControlEvents: .EditingChanged)
+    control?.removeTarget(self, action: nil, for: .editingChanged)
   }
 }
 
@@ -66,12 +66,12 @@ private var textDynamicHandleUITextField: UInt8 = 0;
 extension UITextField /*: Dynamical, Bondable */ {
   
   public var dynText: Dynamic<String> {
-    if let d: AnyObject = objc_getAssociatedObject(self, &textDynamicHandleUITextField) {
+    if let d: AnyObject = objc_getAssociatedObject(self, &textDynamicHandleUITextField) as AnyObject? {
       return (d as? Dynamic<String>)!
     } else {
       let d = TextFieldDynamic<String>(control: self)
       let bond = Bond<String>() { [weak self, weak d] v in
-        if let s = self, d = d where !d.updatingFromSelf {
+        if let s = self, let d = d , !d.updatingFromSelf {
           s.text = v
         }
       }
@@ -95,7 +95,7 @@ public func ->> (left: UITextField, right: Bond<String>) {
   left.designatedDynamic ->> right
 }
 
-public func ->> <U: Bondable where U.BondType == String>(left: UITextField, right: U) {
+public func ->> <U: Bondable>(left: UITextField, right: U) where U.BondType == String {
   left.designatedDynamic ->> right.designatedBond
 }
 
@@ -111,7 +111,7 @@ public func ->> (left: UITextField, right: UITextView) {
   left.designatedDynamic ->> right.designatedBond
 }
 
-public func ->> <T: Dynamical where T.DynamicType == String>(left: T, right: UITextField) {
+public func ->> <T: Dynamical>(left: T, right: UITextField) where T.DynamicType == String {
   left.designatedDynamic ->> right.designatedBond
 }
 

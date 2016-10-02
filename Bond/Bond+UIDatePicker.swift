@@ -30,23 +30,23 @@ import UIKit
 class DatePickerDynamicHelper
 {
   weak var control: UIDatePicker?
-  var listener: (NSDate -> Void)?
+  var listener: ((Date) -> Void)?
   
   init(control: UIDatePicker) {
     self.control = control
-    control.addTarget(self, action: Selector("valueChanged:"), forControlEvents: .ValueChanged)
+    control.addTarget(self, action: Selector("valueChanged:"), for: .valueChanged)
   }
   
-  func valueChanged(control: UIDatePicker) {
+  func valueChanged(_ control: UIDatePicker) {
     self.listener?(control.date)
   }
   
   deinit {
-    control?.removeTarget(self, action: nil, forControlEvents: .ValueChanged)
+    control?.removeTarget(self, action: nil, for: .valueChanged)
   }
 }
 
-class DatePickerDynamic<T>: InternalDynamic<NSDate>
+class DatePickerDynamic<T>: InternalDynamic<Date>
 {
   let helper: DatePickerDynamicHelper
   
@@ -64,14 +64,14 @@ class DatePickerDynamic<T>: InternalDynamic<NSDate>
 private var dateDynamicHandleUIDatePicker: UInt8 = 0;
 
 extension UIDatePicker /*: Dynamical, Bondable */ {
-  public var dynDate: Dynamic<NSDate> {
-    if let d: AnyObject = objc_getAssociatedObject(self, &dateDynamicHandleUIDatePicker) {
-      return (d as? Dynamic<NSDate>)!
+  public var dynDate: Dynamic<Date> {
+    if let d: AnyObject = objc_getAssociatedObject(self, &dateDynamicHandleUIDatePicker) as AnyObject? {
+      return (d as? Dynamic<Date>)!
     } else {
-      let d = DatePickerDynamic<NSDate>(control: self)
+      let d = DatePickerDynamic<Date>(control: self)
       
-      let bond = Bond<NSDate>() { [weak self, weak d] v in
-        if let s = self, d = d where !d.updatingFromSelf {
+      let bond = Bond<Date>() { [weak self, weak d] v in
+        if let s = self, let d = d , !d.updatingFromSelf {
           s.date = v
         }
       }
@@ -83,20 +83,20 @@ extension UIDatePicker /*: Dynamical, Bondable */ {
     }
   }
   
-  public var designatedDynamic: Dynamic<NSDate> {
+  public var designatedDynamic: Dynamic<Date> {
     return self.dynDate
   }
   
-  public var designatedBond: Bond<NSDate> {
+  public var designatedBond: Bond<Date> {
     return self.dynDate.valueBond
   }
 }
 
-public func ->> (left: UIDatePicker, right: Bond<NSDate>) {
+public func ->> (left: UIDatePicker, right: Bond<Date>) {
   left.designatedDynamic ->> right
 }
 
-public func ->> <U: Bondable where U.BondType == NSDate>(left: UIDatePicker, right: U) {
+public func ->> <U: Bondable>(left: UIDatePicker, right: U) where U.BondType == Date {
   left.designatedDynamic ->> right.designatedBond
 }
 
@@ -104,7 +104,7 @@ public func ->> (left: UIDatePicker, right: UIDatePicker) {
   left.designatedDynamic ->> right.designatedBond
 }
 
-public func ->> (left: Dynamic<NSDate>, right: UIDatePicker) {
+public func ->> (left: Dynamic<Date>, right: UIDatePicker) {
   left ->> right.designatedBond
 }
 
@@ -112,10 +112,10 @@ public func <->> (left: UIDatePicker, right: UIDatePicker) {
   left.designatedDynamic <->> right.designatedDynamic
 }
 
-public func <->> (left: Dynamic<NSDate>, right: UIDatePicker) {
+public func <->> (left: Dynamic<Date>, right: UIDatePicker) {
   left <->> right.designatedDynamic
 }
 
-public func <->> (left: UIDatePicker, right: Dynamic<NSDate>) {
+public func <->> (left: UIDatePicker, right: Dynamic<Date>) {
   left.designatedDynamic <->> right
 }

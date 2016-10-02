@@ -11,7 +11,7 @@ import Bond
 
 @objc class User: NSObject {
   dynamic var name: NSString?
-  dynamic var height: NSNumber = NSNumber(float: 0.0)
+  dynamic var height: NSNumber = NSNumber(value: 0.0 as Float)
   
   init(name: NSString?) {
     self.name = name
@@ -20,7 +20,7 @@ import Bond
 }
 
 class FoundationTests: XCTestCase {
-  
+
   func testKVO() {
     let user = User(name: nil)
     let dynamic: Dynamic<String> = dynamicObservableFor(user, keyPath: "name", defaultValue: "")
@@ -36,7 +36,7 @@ class FoundationTests: XCTestCase {
   
   func testKVO2() {
     let user = User(name: nil)
-    let dynamic: Dynamic<String?> = dynamicObservableFor(user, keyPath: "name", from: { $0 as? String }, to: { $0 })
+    let dynamic: Dynamic<String?> = dynamicObservableFor(user, keyPath: "name", from: { $0 as? String }, to: { $0 as AnyObject? })
     
     XCTAssert(dynamic.value == nil, "Value after initialization.")
     
@@ -52,7 +52,7 @@ class FoundationTests: XCTestCase {
   
   func testKVO3() {
     let user = User(name: nil)
-    let dynamic: Dynamic<String> = dynamicObservableFor(user, keyPath: "name", from: { ($0 as? String) ?? "" }, to: { $0 })
+    let dynamic: Dynamic<String> = dynamicObservableFor(user, keyPath: "name", from: { ($0 as? String) ?? "" }, to: { $0 as AnyObject? })
     
     XCTAssert(dynamic.value == "", "Value after initialization.")
     
@@ -68,7 +68,7 @@ class FoundationTests: XCTestCase {
   
   func testKVO4() {
     let user = User(name: nil)
-    let height: Dynamic<Float> = dynamicObservableFor(user, keyPath: "height", from: { ($0 as? NSNumber)?.floatValue ?? 0 }, to: { NSNumber(float: $0) })
+    let height: Dynamic<Float> = dynamicObservableFor(user, keyPath: "height", from: { ($0 as? NSNumber)?.floatValue ?? 0 }, to: { NSNumber(value: $0 as Float) })
     
     XCTAssert(abs(height.value - 0) < 0.0001, "Value after initialization.")
     

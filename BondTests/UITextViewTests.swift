@@ -26,7 +26,7 @@ class UITextViewTests: XCTestCase {
     XCTAssert(textView.text == "c", "Text view value reflects dynamic value change")
     
     textView.text = "d"
-    NSNotificationCenter.defaultCenter().postNotificationName(UITextViewTextDidChangeNotification, object: textView)
+    NotificationCenter.default.post(name: NSNotification.Name.UITextViewTextDidChange, object: textView)
     XCTAssert(textView.dynText.value == "d", "Dynamic value reflects text view value change")
     XCTAssert(dynamicDriver.value == "d", "Dynamic value reflects text view value change")
   }
@@ -45,7 +45,7 @@ class UITextViewTests: XCTestCase {
     XCTAssert(textView.attributedText.string == "c", "Text view value reflects dynamic value change")
     
     textView.attributedText = NSAttributedString(string: "d")
-    NSNotificationCenter.defaultCenter().postNotificationName(UITextViewTextDidChangeNotification, object: textView)
+    NotificationCenter.default.post(name: NSNotification.Name.UITextViewTextDidChange, object: textView)
     XCTAssert(textView.dynAttributedText.value.string == "d", "Dynamic value reflects text view value change")
     XCTAssert(dynamicDriver.value.string == "d", "Dynamic value reflects text view value change")
   }
@@ -114,7 +114,7 @@ class UITextViewTests: XCTestCase {
     XCTAssertEqual(textField.text, "y", "Value after change")
     
     textField.text = "2"
-    textField.sendActionsForControlEvents(.EditingChanged)
+    textField.sendActions(for: .editingChanged)
     
     XCTAssertEqual(dynamicDriver1.value, "2", "Value after change")
     XCTAssertEqual(dynamicDriver2.value, "2", "Value after change")
