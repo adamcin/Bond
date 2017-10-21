@@ -648,6 +648,7 @@ private class DynamicArrayFilterProxy<T>: DynamicArray<T> {
   }
 }
 
+
 // MARK: Dynamic Array additions
 
 public extension DynamicArray
@@ -664,6 +665,11 @@ public extension DynamicArray
   public func filter(_ f: @escaping (T) -> Bool) -> DynamicArray<T> {
     return _filter(self, f: f)
   }
+    
+    // MARK: Filter
+    private func _filter<T>(_ dynamicArray: DynamicArray<T>, f: @escaping (T) -> Bool) -> DynamicArray<T> {
+        return DynamicArrayFilterProxy(sourceArray: dynamicArray, filterf: f)
+    }
 }
 
 // MARK: Map
@@ -672,8 +678,6 @@ private func _map<T, U>(_ dynamicArray: DynamicArray<T>, f: @escaping (T, Int) -
   return DynamicArrayMapProxy(sourceArray: dynamicArray, mapf: f)
 }
 
-// MARK: Filter
 
-private func _filter<T>(_ dynamicArray: DynamicArray<T>, f: @escaping (T) -> Bool) -> DynamicArray<T> {
-  return DynamicArrayFilterProxy(sourceArray: dynamicArray, filterf: f)
-}
+
+
